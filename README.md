@@ -21,3 +21,8 @@ pip install "gdsfactory[full]" --upgrade
 - [KLayout](https://www.klayout.de/build.html#downloads)
 - [KLive](https://gdsfactory.github.io/klive/)
 
+## Usage
+```shell
+# 指定数据文件
+python main.py --data_file data.mat
+```

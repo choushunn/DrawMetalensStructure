@@ -6,8 +6,18 @@
 # @Time       : 10/04/2024 17:27
 # @Description:
 """
+import argparse
+
 from draw_structure import draw_structure
 from utils import check_dirs, check_requirements
+
+
+def parse_args():
+    opt = argparse.ArgumentParser()
+    opt.add_argument('--data_file', type=str,
+                     default='data/Data_Lens_3cm_60fs_error0-3_error0-5_5wavelengths_inpolar_metalens4-3(lam4rightdown)-20240402.mat',
+                     help='数据文件名')
+    return opt.parse_args()
 
 
 def main():
@@ -15,8 +25,8 @@ def main():
     check_requirements()
     print('开始绘制结构............')
     # 修改数据文件名
-    data_file_name = 'data/Data_Lens_3cm_60fs_error0-3_error0-5_5wavelengths_inpolar_metalens4-3(lam4rightdown)-20240402.mat'
-    draw_structure(data_file_name)
+    opt = parse_args()
+    draw_structure(opt.data_file)
 
 
 if __name__ == '__main__':

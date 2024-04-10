@@ -29,6 +29,9 @@ def read_data(file_name: str):
     :param file_name:
     :return:
     """
+    # 判断文件是否存在
+    if not os.path.exists(file_name):
+        raise FileNotFoundError(f'{file_name} is not exist.')
     data = sio.loadmat(file_name)
     X = data['X'].astype('float')
     Y = data['Y'].astype('float')
