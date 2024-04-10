@@ -31,7 +31,7 @@ def draw_structure(opt):
     N = len(X)
     # 计算索引
     indices = np.indices((N, N)).reshape(2, -1).T
-    # 计算半径
+    # 计算半径,单位
     r = (np.sqrt(1.8 ** 2 + 1.8 ** 2) + 1.6) * 10 ** 7
     # 初始化字典,必须定义字典
     rectangle_dict = {}

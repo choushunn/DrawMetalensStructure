@@ -25,4 +25,5 @@ pip install "gdsfactory[full]" --upgrade
 ```shell
 # 指定数据文件,开始运行
 python main.py --data_file data.mat
+               --units 1e-3        
 ```

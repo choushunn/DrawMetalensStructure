@@ -19,7 +19,7 @@ def parse_args():
                      help='数据文件名')
     opt.add_argument('--show', type=bool, default=False, help='是否显示')
     # 度量单位
-    opt.add_argument('--units', type=float, default=1, help='度量单位，1表示um,1e-3表示nm')
+    opt.add_argument('--units', type=float, default=1e-3, help='度量单位，1表示um,1e-3表示nm')
     return opt.parse_args()
 
 
