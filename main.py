@@ -18,6 +18,8 @@ def parse_args():
                      default='data/Data_Lens_3cm_60fs_error0-3_error0-5_5wavelengths_inpolar_metalens4-3(lam4rightdown)-20240402.mat',
                      help='数据文件名')
     opt.add_argument('--show', type=bool, default=False, help='是否显示')
+    # 度量单位
+    opt.add_argument('--units', type=float, default=1, help='度量单位，1表示um,1e-3表示nm')
     return opt.parse_args()
 
 

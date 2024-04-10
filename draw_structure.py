@@ -14,14 +14,15 @@ import gdsfactory as gf
 from utils import create_filename, read_data, get_radius_width
 
 
-def draw_structure(opt, nm=1e-3):
+def draw_structure(opt):
     """
     绘制结构
-    :param nm:
     :param opt:输入参数
     :return:
     """
     data = read_data(opt.data_file)
+    # 统一单位
+    units = opt.units
     # 获取数据
     X, Y, L, W, structure = data['X'], data['Y'], data['L'], data['W'], data['structure']
     # 创建画布
@@ -42,27 +43,28 @@ def draw_structure(opt, nm=1e-3):
     p_bar = tqdm(total=N * N)
     # =========遍历每个结构===========
     for i, j in indices:
-        if (X[i, j] * nm) ** 2 + (Y[i, j] * nm) ** 2 <= r ** 2:
+        if (X[i, j] * units) ** 2 + (Y[i, j] * units) ** 2 <= r ** 2:
             structure_type = int(structure[i, j])
             if 10000 <= structure_type < 30000:
                 if 10000 <= structure_type < 20000:
                     # 绘制square结构，正方形L是边长
                     rectangle_dict[f"rectangle_{n}"] = layout << gf.components.rectangle(
-                        size=(L[i, j] * nm, L[i, j] * nm), layer=(1, 0))
-                    rectangle_dict[f"rectangle_{n}"].move((X[i, j] * nm, Y[i, j] * nm))
+                        size=(L[i, j] * units, L[i, j] * units), layer=(1, 0))
+                    rectangle_dict[f"rectangle_{n}"].move((X[i, j] * units, Y[i, j] * units))
                 elif 20000 <= structure_type < 30000:
                     # 绘制circle结构,圆中L是半径
-                    circle_dict[f"circle_{n}"] = layout << gf.components.circle(radius=L[i, j] * nm,
-                                                                                angle_resolution=2.5 * nm, layer=(2, 0))
-                    circle_dict[f"circle_{n}"].move((X[i, j] * nm, Y[i, j] * nm))
+                    circle_dict[f"circle_{n}"] = layout << gf.components.circle(radius=L[i, j] * units,
+                                                                                angle_resolution=2.5 * units,
+                                                                                layer=(2, 0))
+                    circle_dict[f"circle_{n}"].move((X[i, j] * units, Y[i, j] * units))
                 elif structure_type >= 30000:
                     # 绘制ring结构，环L是外径,W是内径
-                    radius, width = get_radius_width(outer_radius=L[i, j] * nm, inner_radius=W[i, j] * nm)
+                    radius, width = get_radius_width(outer_radius=L[i, j] * units, inner_radius=W[i, j] * units)
                     ring_dict[f"ring_{n}"] = layout << gf.components.ring(radius=radius,
                                                                           width=width,
-                                                                          angle_resolution=2.5 * nm,
+                                                                          angle_resolution=2.5 * units,
                                                                           layer=(3, 0))
-                    ring_dict[f"ring_{n}"].move((X[i, j] * nm, Y[i, j] * nm))
+                    ring_dict[f"ring_{n}"].move((X[i, j] * units, Y[i, j] * units))
         # =========判断结束===========
         n += 1
         p_bar.update(1)
