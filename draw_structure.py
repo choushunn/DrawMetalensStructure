@@ -43,8 +43,6 @@ def draw_structure(opt):
     p_bar = tqdm(total=N * N)
     # =========遍历每个结构===========
     for i, j in indices:
-        if n > 40000:
-            break
         if (X[i, j] * units) ** 2 + (Y[i, j] * units) ** 2 <= r ** 2:
             structure_type = int(structure[i, j])
             if 10000 <= structure_type < 20000:
