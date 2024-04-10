@@ -69,6 +69,7 @@ def check_requirements():
         {"name": "gdsfactory", "command": 'pip install "gdsfactory[full]" --upgrade'}
     ]
 
+    print("正在检查环境依赖...")
     for package in packages:
         try:
             # 尝试导入包，如果导入成功则已安装

@@ -14,15 +14,14 @@ import gdsfactory as gf
 from utils import create_filename, read_data, get_radius_width
 
 
-def draw_structure(data_file, nm=1e-3, show=False):
+def draw_structure(opt, nm=1e-3):
     """
     绘制结构
-    :param show: 是否显示
     :param nm:
-    :param data_file:数据文件名
+    :param opt:输入参数
     :return:
     """
-    data = read_data(data_file)
+    data = read_data(opt.data_file)
     # 获取数据
     X, Y, L, W, structure = data['X'], data['Y'], data['L'], data['W'], data['structure']
     # 创建画布
@@ -70,14 +69,14 @@ def draw_structure(data_file, nm=1e-3, show=False):
         p_bar.set_description(f"i:{i}/{N},j:{j}/{N}")
     # =========循环结束===========
     p_bar.close()
-    # plot it in jupyter notebook
-    # layout.plot()
     # 写入文件
     layout.write_gds(create_filename())
-    if show:
+
+    if opt.show:
         # show it in klayout
         layout.show()
-
+        # plot it in jupyter notebook
+        # layout.plot()
     return layout
 
 

@@ -23,6 +23,6 @@ pip install "gdsfactory[full]" --upgrade
 
 ## Usage
 ```shell
-# 指定数据文件
+# 指定数据文件,开始运行
 python main.py --data_file data.mat
 ```
