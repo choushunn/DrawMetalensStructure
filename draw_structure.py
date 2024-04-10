@@ -78,3 +78,44 @@ def draw_structure(data_file, nm=1e-3, show=False):
         layout.show()
 
     return layout
+
+
+def get_radius_width(outer_radius, inner_radius):
+    """
+    计算半径和宽度
+    :param outer_radius:(2*radius+width)/2
+    :param inner_radius:(2*radius-width)/2
+    :return:
+    """
+    radius = (outer_radius + inner_radius) / 2
+    width = outer_radius - inner_radius
+    return radius, width
+
+
+def draw_demo():
+    """
+    示例代码
+    :return:
+    """
+    layout = gf.Component("Demo")
+    rectangle = gf.components.rectangle(size=(10, 10), layer=(1, 0))
+    circle = gf.components.circle(radius=5, angle_resolution=2.5, layer=(2, 0))
+
+    triangle = gf.components.triangle(x=10, y=14, layer=(4, 0))
+    line = gf.components.straight(length=10, layer=(5, 0))
+
+    layout.add_ref(rectangle).move((-10, -10))
+    layout.add_ref(circle).move((0, 16))
+    layout.add_ref(triangle).move((55, 0))
+    layout.add_ref(line).move((55, 35))
+    # 画圆环
+    radius, width = get_radius_width(10, 6)
+    ring = gf.components.ring(radius=radius, width=width, angle_resolution=2.5, layer=(3, 0))
+    layout.add_ref(ring).move((0, 16))
+
+    layout.write_gds(f"output/demo.gds")
+    layout.show()
+
+
+if __name__ == '__main__':
+    draw_demo()
