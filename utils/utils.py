@@ -84,6 +84,18 @@ def check_requirements():
                 print(f"{package['name']} 安装失败")
 
 
+def get_radius_width(outer_radius, inner_radius):
+    """
+    计算半径和宽度
+    :param outer_radius:(2*radius+width)/2
+    :param inner_radius:(2*radius-width)/2
+    :return:
+    """
+    radius = (outer_radius + inner_radius) / 2
+    width = outer_radius - inner_radius
+    return radius, width
+
+
 if __name__ == '__main__':
     check_dirs()
     check_requirements()

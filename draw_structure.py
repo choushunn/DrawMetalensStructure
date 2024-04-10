@@ -11,7 +11,7 @@ import numpy as np
 from tqdm import tqdm
 import gdsfactory as gf
 
-from utils import create_filename, read_data
+from utils import create_filename, read_data, get_radius_width
 
 
 def draw_structure(data_file, nm=1e-3, show=False):
@@ -57,9 +57,10 @@ def draw_structure(data_file, nm=1e-3, show=False):
                                                                                 angle_resolution=2.5 * nm, layer=(2, 0))
                     circle_dict[f"circle_{n}"].move((X[i, j] * nm, Y[i, j] * nm))
                 elif structure_type >= 30000:
-                    # 绘制ring结构，环L是外经W是内径
-                    ring_dict[f"ring_{n}"] = layout << gf.components.ring(radius=L[i, j] * nm,
-                                                                          width=L[i, j] * nm - W[i, j] * nm,
+                    # 绘制ring结构，环L是外径,W是内径
+                    radius, width = get_radius_width(outer_radius=L[i, j] * nm, inner_radius=W[i, j] * nm)
+                    ring_dict[f"ring_{n}"] = layout << gf.components.ring(radius=radius,
+                                                                          width=width,
                                                                           angle_resolution=2.5 * nm,
                                                                           layer=(3, 0))
                     ring_dict[f"ring_{n}"].move((X[i, j] * nm, Y[i, j] * nm))
@@ -78,18 +79,6 @@ def draw_structure(data_file, nm=1e-3, show=False):
         layout.show()
 
     return layout
-
-
-def get_radius_width(outer_radius, inner_radius):
-    """
-    计算半径和宽度
-    :param outer_radius:(2*radius+width)/2
-    :param inner_radius:(2*radius-width)/2
-    :return:
-    """
-    radius = (outer_radius + inner_radius) / 2
-    width = outer_radius - inner_radius
-    return radius, width
 
 
 def draw_demo():
