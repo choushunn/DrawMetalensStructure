@@ -8,7 +8,7 @@
 """
 import numpy as np
 
-from tqdm import tqdm
+# from tqdm import tqdm
 import gdsfactory as gf
 
 from utils import create_filename, read_data, get_radius_width
@@ -40,9 +40,11 @@ def draw_structure(opt):
     # 迭代计数变量
     n = 1
     # 初始化进度条
-    p_bar = tqdm(total=N * N)
+    # p_bar = tqdm(total=N * N)
     # =========遍历每个结构===========
     for i, j in indices:
+        if n >= opt.stop_num > 0:
+            break
         if (X[i, j] * units) ** 2 + (Y[i, j] * units) ** 2 <= r ** 2:
             structure_type = int(structure[i, j])
             if 10000 <= structure_type < 20000:
@@ -66,10 +68,10 @@ def draw_structure(opt):
                 ring_dict[f"ring_{n}"].move((X[i, j] * units, Y[i, j] * units))
         # =========判断结束===========
         n += 1
-        p_bar.update(1)
-        p_bar.set_description(f"i:{i}/{N},j:{j}/{N}")
+        # p_bar.update(1)
+        # p_bar.set_description(f"i:{i}/{N},j:{j}/{N}")
     # =========循环结束===========
-    p_bar.close()
+    # p_bar.close()
     # 写入文件
     layout.write_gds(create_filename())
 

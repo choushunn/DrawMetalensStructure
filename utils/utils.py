@@ -17,7 +17,7 @@ def check_dirs():
     """
     检查项目所需文件夹是否存在，不存在则创建
     """
-    dirs = ['output', 'data']
+    dirs = ['output', 'data', 'logs']
     for d in dirs:
         if not os.path.exists(d):
             os.makedirs(d)
@@ -66,7 +66,8 @@ def check_requirements():
     """
     packages = [
         {"name": "klayout", "command": "pip install klayout --upgrade"},
-        {"name": "gdsfactory", "command": 'pip install "gdsfactory[full]" --upgrade'}
+        {"name": "gdsfactory", "command": 'pip install "gdsfactory[full]" --upgrade'},
+        {"name": "tensorboardX", "command": "pip install tensorboardX --upgrade"},
     ]
 
     print("正在检查环境依赖...")
