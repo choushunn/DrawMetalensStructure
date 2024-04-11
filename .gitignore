@@ -5,6 +5,7 @@
 test/
 output/
 data/
+logs/
 
 # User-specific stuff
 .idea/**/workspace.xml
