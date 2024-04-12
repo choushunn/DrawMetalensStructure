@@ -13,7 +13,7 @@ import subprocess
 def check_python_version():
     # 获取当前的python版本
     python_version = subprocess.check_output(["python", "--version"], text=True)
-    print(f"当前的版本是 {python_version}")
+    print(f"{python_version}")
 
 
 def check_requirements():
@@ -38,7 +38,7 @@ def check_requirements():
             __import__(package["name"])
             # print(f"{package['name']} 已安装")
         except ImportError:
-            print(f"{package['name']} 未安装，正在尝试安装...")
+            print(f"{package['name']} 未安装，正在尝试安装......")
             # 执行安装命令
             try:
                 subprocess.check_call(package["command"], shell=True)

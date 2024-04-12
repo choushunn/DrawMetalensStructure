@@ -39,7 +39,7 @@ def main():
     """
     check_requirements()
     check_dirs()
-    print('正在绘制，请等待............')
+    print('正在绘制，请等待......')
     draw_structure(parse_args())
     print('绘制完成')
 

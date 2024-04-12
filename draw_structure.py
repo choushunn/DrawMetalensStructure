@@ -39,8 +39,9 @@ def draw_structure(opt):
     ring_dict = {}
     # 迭代计数变量
     n = 1
-    # 初始化进度条
-    p_bar = tqdm(total=N * N)
+    if opt.show:
+        # 显示进度条
+        p_bar = tqdm(total=opt.stop_num if opt.stop_num > 0 else N * N)
     # =========遍历每个结构===========
     for i, j in indices:
         if n >= opt.stop_num > 0:
