@@ -8,7 +8,6 @@
 """
 import os
 import scipy.io as sio
-import subprocess
 
 from datetime import datetime
 
@@ -59,33 +58,6 @@ def create_filename():
     return f"output/{timestamp}.gds"
 
 
-def check_requirements():
-    """
-    检查依赖是否存在
-    :return:
-    """
-    packages = [
-        {"name": "klayout", "command": "pip install klayout --upgrade"},
-        {"name": "gdsfactory", "command": 'pip install "gdsfactory[full]" --upgrade'},
-        {"name": "tensorboardX", "command": "pip install tensorboardX --upgrade"},
-    ]
-
-    print("正在检查环境依赖...")
-    for package in packages:
-        try:
-            # 尝试导入包，如果导入成功则已安装
-            __import__(package["name"])
-            print(f"{package['name']} 已安装")
-        except ImportError:
-            print(f"{package['name']} 未安装，正在尝试安装...")
-            # 执行安装命令
-            try:
-                subprocess.check_call(package["command"], shell=True)
-                print(f"{package['name']} 安装成功")
-            except subprocess.CalledProcessError:
-                print(f"{package['name']} 安装失败")
-
-
 def get_radius_width(outer_radius, inner_radius):
     """
     计算半径和宽度
@@ -100,4 +72,3 @@ def get_radius_width(outer_radius, inner_radius):
 
 if __name__ == '__main__':
     check_dirs()
-    check_requirements()
