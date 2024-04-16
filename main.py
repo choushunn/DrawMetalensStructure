@@ -10,7 +10,7 @@ import argparse
 import cProfile
 import pstats
 
-from draw_structure import draw_structure
+from draw_structure import draw_structure, draw_poly
 from utils import check_dirs
 from utils.check_env import check_requirements
 
@@ -22,9 +22,9 @@ def parse_args():
     """
     opt = argparse.ArgumentParser()
     opt.add_argument('--data_file', type=str,
-                     default='data/Data_Lens_3cm_60fs_error0-3_error0-5_5wavelengths_inpolar_metalens4-3(lam4rightdown)-20240402.mat',
+                     default='data/Data_Lens_3cm_60fs_error0-3_error0-5_5wavelengths_inpolar_metalens4-3(lam4rightdownstructureXYLW)-202404010.mat',
                      help='数据文件名')
-    opt.add_argument('--show', type=bool, default=False, help='是否显示进度条，绘制大文件时建议不显示')
+    opt.add_argument('--show', type=bool, default=True, help='是否显示进度条，绘制大文件时建议不显示')
     # 度量单位
     opt.add_argument('--units', type=float, default=1e-3, help='度量单位，1表示um,1e-3表示nm')
     opt.add_argument('--multiple', type=bool, default=False, help='使用多线程绘制')
@@ -33,6 +33,7 @@ def parse_args():
 
 
 def main():
+
     """
     主函数
     :return:
@@ -41,6 +42,7 @@ def main():
     check_dirs()
     print('正在绘制，请等待......')
     draw_structure(parse_args())
+
     print('绘制完成')
 
 
