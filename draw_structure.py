@@ -11,7 +11,7 @@ import numpy as np
 from tqdm import tqdm
 import gdsfactory as gf
 
-from utils import create_filename, read_data, get_radius_width
+from utils import create_filename, read_data, get_radius_width, radians_to_degrees
 
 
 def draw_structure(opt):
@@ -24,7 +24,7 @@ def draw_structure(opt):
     # 统一单位
     units = opt.units
     # 获取数据
-    X, Y, L, W, structure = data['X'], data['Y'], data['L'], data['W'], data['structure']
+    X, Y, L, W, structure, Beta = data['X'], data['Y'], data['L'], data['W'], data['structure'], data['Beta']
     # 创建画布
     layout = gf.Component("My_Layout")
     # 计算总结构数
@@ -137,5 +137,68 @@ def read_append_demo(opt):
     layout.write_gds(f"output/layout_a.gds")
 
 
+def draw_new(opt):
+    """
+    绘制结构
+    :param opt:输入参数
+    :return:
+    """
+    data = read_data(opt.data_file)
+    # 统一单位
+    units = opt.units
+    # 获取数据
+    X, Y, L, W, structure, Beta = data['X'], data['Y'], data['L'], data['W'], data['structure'], data['Beta']
+    # 创建画布
+    layout = gf.Component("My_Layout")
+    # 计算总结构数
+    N = len(X)
+    # 计算索引
+    indices = np.indices((N, N)).reshape(2, -1).T
+    # 计算半径,单位
+    r = (np.sqrt(1.8 ** 2 + 1.8 ** 2) + 1.6) * 10 ** 7
+    # 初始化字典,必须定义字典
+    rectangle_dict = {}
+    rectangle_rotate_dict = {}
+    circle_dict = {}
+    ring_dict = {}
+    # 迭代计数变量
+    n = 1
+    if opt.show:
+        # 显示进度条
+        p_bar = tqdm(total=opt.stop_num if opt.stop_num > 0 else N * N)
+    # =========遍历每个结构===========
+    for i, j in indices:
+        n += 1
+        if n >= opt.stop_num > 0:
+            break
+        if (X[i, j] * units) ** 2 + (Y[i, j] * units) ** 2 <= r ** 2:
+            if Beta is not None:
+                if L[i, j] == 0 or W[i, j] == 0:
+                    continue
+                # 画旋转矩形
+                rectangle_rotate_dict[f"rectangle_rotate_{n}"] = layout << gf.components.rectangle(
+                    size=(L[i, j] * units, W[i, j] * units), layer=(4, 0))
+
+                rectangle_rotate_dict[f"rectangle_rotate_{n}"].move(
+                    (X[i, j] * units, Y[i, j] * units)).rotate(radians_to_degrees(Beta[i, j]))
+        # =========判断结束===========
+
+        if opt.show:
+            p_bar.update(1)
+            p_bar.set_description(f"i:{i}/{N},j:{j}/{N}")
+    # =========循环结束===========
+    # p_bar.close()
+    # 写入文件
+    layout.write_gds(create_filename())
+
+    # if opt.show:
+    # show it in klayout
+    # layout.show()
+    # plot it in jupyter notebook
+    # layout.plot()
+    return layout
+
+
 if __name__ == '__main__':
-    pass
+    print(read_data(
+        "data/exp0416/Data_Lens_3cm_30fs_error5_5wavelengths_metalens4-4(lam3leftdownXYLWBeta-last)-20240410.mat").keys())

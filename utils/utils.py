@@ -7,6 +7,8 @@
 # @Description: 
 """
 import os
+
+import numpy as np
 import scipy.io as sio
 
 from datetime import datetime
@@ -36,13 +38,15 @@ def read_data(file_name: str):
     Y = data['Y'].astype('float')
     L = data['L'].astype('float')
     W = data['W'].astype('float')
-    structure = data['structure']
+    Beta = data.get('Beta_ij', None)
+    structure = data.get('structure', None)
     return {
         'X': X,
         'Y': Y,
         'L': L,
         'W': W,
-        'structure': structure
+        'structure': structure,
+        'Beta': Beta
     }
 
 
@@ -68,6 +72,11 @@ def get_radius_width(outer_radius, inner_radius):
     radius = (outer_radius + inner_radius) / 2
     width = outer_radius - inner_radius
     return radius, width
+
+
+def radians_to_degrees(radians):
+    degrees = radians * (180 / np.pi)
+    return degrees
 
 
 if __name__ == '__main__':
