@@ -50,7 +50,7 @@ def test():
     性能测试
     :return:
     """
-    cProfile.run('draw_structure(parse_args())', filename='logs/profile.log')
+    cProfile.run('draw_new(parse_args())', filename='logs/profile.log')
     p = pstats.Stats('logs/profile.log')
     # p.strip_dirs().sort_stats(-1).print_stats()
     # 打印累计耗时最多的10个函数
@@ -61,5 +61,5 @@ def test():
 
 
 if __name__ == '__main__':
-    main()
-    # test()
+    # main()
+    test()

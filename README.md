@@ -15,7 +15,10 @@ pip install klayout --upgrade
 ```
 pip install "gdsfactory[full]" --upgrade
 ```
-
+- [KFactory](https://gdsfactory.github.io/kfactory/intro/)
+```
+pip install "kfactory" --upgrade
+```
 ### KLayout 及插件
 
 - [KLayout](https://www.klayout.de/build.html#downloads)

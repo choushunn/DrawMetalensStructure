@@ -51,7 +51,7 @@ def draw_structure(opt):
             if 10000 <= structure_type < 20000:
                 # 绘制square结构，正方形L是边长
                 rectangle_dict[f"rectangle_{n}"] = layout << gf.components.rectangle(
-                    size=(L[i, j] * units, L[i, j] * units), layer=(1, 0))
+                    size=(L[i, j] * units, L[i, j] * units), layer=(1, 0), )
                 rectangle_dict[f"rectangle_{n}"].move((X[i, j] * units, Y[i, j] * units))
             elif 20000 <= structure_type < 30000:
                 # 绘制circle结构,圆中L是半径
@@ -66,6 +66,7 @@ def draw_structure(opt):
                                                                       width=width,
                                                                       angle_resolution=0.5,
                                                                       layer=(3, 0))
+
                 ring_dict[f"ring_{n}"].move((X[i, j] * units, Y[i, j] * units))
         # =========判断结束===========
         n += 1
@@ -117,22 +118,21 @@ def draw_demo():
     # layout.show()
 
 
-def read_append_demo(opt):
+def read_append_demo():
     """
     读取现有画布，并追加
     :param opt: 输入参数
     :return:
     """
     # 读取现有画布
-    layout_a = gf.read.import_gds("output/test-4metalens20240414.gds", cellname="top")
+    layout_a = gf.read.import_gds("data/onesubstrate-4metalens20240414.gds", cellname="top")
+    layout_b = gf.read.import_gds("data/20240416_185958.gds", cellname="My_Layout")
     # 新建画布
     layout = gf.Component("Demo2")
-    # 在新画布中画矩形
-    rectangle1 = gf.components.rectangle(size=(15 * 1e-3, 5 * 1e-3), layer=(2, 0))
-    layout.add_ref(rectangle1).rotate(60)
 
     # 将原有的画布追加到新的画布上
     layout.add_ref(layout_a)
+    layout.add_ref(layout_b)
     # 写入文件
     layout.write_gds(f"output/layout_a.gds")
 
@@ -175,12 +175,14 @@ def draw_new(opt):
             if Beta is not None:
                 if L[i, j] == 0 or W[i, j] == 0:
                     continue
-                # 画旋转矩形
-                rectangle_rotate_dict[f"rectangle_rotate_{n}"] = layout << gf.components.rectangle(
-                    size=(L[i, j] * units, W[i, j] * units), layer=(4, 0))
-
-                rectangle_rotate_dict[f"rectangle_rotate_{n}"].move(
-                    (X[i, j] * units, Y[i, j] * units)).rotate(radians_to_degrees(Beta[i, j]))
+                rect_name = f"rectangle_rotate_{L[i, j]}_{W[i, j]}"
+                if rect_name not in rectangle_rotate_dict:
+                    # 画旋转矩形
+                    rectangle_rotate_dict[f"rectangle_rotate_{L[i, j]}_{W[i, j]}"] = gf.components.rectangle(
+                        size=(L[i, j] * units, W[i, j] * units), layer=(4, 0))
+                rectangle_dict[rect_name] = layout.add_ref(rectangle_rotate_dict[rect_name])
+                rectangle_dict[rect_name].rotate(radians_to_degrees(Beta[i, j]),
+                                                 (X[i, j] * units, Y[i, j] * units))
         # =========判断结束===========
 
         if opt.show:
@@ -199,6 +201,11 @@ def draw_new(opt):
     return layout
 
 
+def draw_beta(opt):
+    pass
+
+
 if __name__ == '__main__':
-    print(read_data(
-        "data/exp0416/Data_Lens_3cm_30fs_error5_5wavelengths_metalens4-4(lam3leftdownXYLWBeta-last)-20240410.mat").keys())
+    # print(read_data(
+    #     "data/exp0416/Data_Lens_3cm_30fs_error5_5wavelengths_metalens4-4(lam3leftdownXYLWBeta-last)-20240410.mat").keys())
+    read_append_demo()
